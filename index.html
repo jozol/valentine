@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Ensure responsiveness -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Valentine Day bé iuuu</title>
+  <style>
+    /* Base page styles with a patterned background */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffe6f0;
+      background-image: radial-gradient(circle, #ffccdd 1px, transparent 1px),
+                        radial-gradient(circle, #ffccdd 1px, transparent 1px);
+      background-position: 0 0, 25px 25px;
+      background-size: 50px 50px;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    
+    /* --- Balloons Flying Up --- */
+    .balloons-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      border-radius: 50% 50% 45% 45%;
+      opacity: 0.9;
+      animation: floatUp 10s linear infinite;
+    }
+    .balloon::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 40px;
+      background: #888;
+    }
+    .balloon:nth-child(1) {
+      left: 10%;
+      width: 40px;
+      height: 60px;
+      background-color: #ff4d4d;
+      animation-duration: 10s;
+      animation-delay: 0s;
+    }
+    .balloon:nth-child(2) {
+      left: 30%;
+      width: 50px;
+      height: 70px;
+      background-color: #ff6699;
+      animation-duration: 9s;
+      animation-delay: 2s;
+    }
+    .balloon:nth-child(3) {
+      left: 50%;
+      width: 35px;
+      height: 55px;
+      background-color: #ff99cc;
+      animation-duration: 11s;
+      animation-delay: 1s;
+    }
+    .balloon:nth-child(4) {
+      left: 70%;
+      width: 45px;
+      height: 65px;
+      background-color: #ff3366;
+      animation-duration: 8s;
+      animation-delay: 3s;
+    }
+    .balloon:nth-child(5) {
+      left: 85%;
+      width: 40px;
+      height: 60px;
+      background-color: #ff5c8a;
+      animation-duration: 12s;
+      animation-delay: 1.5s;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0); opacity: 0.9; }
+      50%  { opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
+    }
+    
+    /* --- Main Center Container (full viewport) --- */
+    .main-center {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+    }
+    /* Center container for the main sparkling trail & text – set to 300×300 */
+    .center-container {
+      position: relative;
+      width: 80vw;
+      max-width: 300px;
+      aspect-ratio: 1/1;
+    }
+    
+    /* --- Sparkling Trail (Heart Shape) --- */
+    /* The classic heart path is defined in a 300×300 coordinate system */
+    /* We remove the offset-path from the container and instead apply it to each dot */
+    .sparkle-heart {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+      /* No offset-path here */
+    }
+    /* Each sparkling dot follows the heart path */
+    .sparkle {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255,255,255,0.8);
+      transform: translate(-50%, -50%);
+      /* Apply the heart path to each dot */
+      offset-path: path('M150,80 C150,74 140,50 100,50 C40,50 40,125 40,125 C40,160 80,204 150,240 C220,204 260,160 260,125 C260,125 260,50 200,50 C170,50 150,74 150,80 Z');
+      -webkit-offset-path: path('M150,80 C150,74 140,50 100,50 C40,50 40,125 40,125 C40,160 80,204 150,240 C220,204 260,160 260,125 C260,125 260,50 200,50 C170,50 150,74 150,80 Z');
+      offset-rotate: auto;
+      animation: followHeart 4s linear infinite, bloomGlow 1.5s ease-in-out infinite;
+    }
+    @keyframes followHeart {
+      from { offset-distance: 0%; }
+      to   { offset-distance: 100%; }
+    }
+    @keyframes bloomGlow {
+      0%   { transform: translate(-50%, -50%) scale(1); filter: brightness(1); }
+      50%  { transform: translate(-50%, -50%) scale(1.3); filter: brightness(1.8); }
+      100% { transform: translate(-50%, -50%) scale(1); filter: brightness(1); }
+    }
+    
+    /* --- Extra Heart Trails --- */
+    /* Extra heart trails use the same path & animations but are positioned differently */
+    .extra-heart {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      /* No offset-path on container; see below for each dot */
+      animation: none;
+    }
+    /* Extra heart containers are positioned with different rotations/scales */
+    .heart1 { left: 20%; top: 10%; transform: translate(-50%, -50%) scale(0.8) rotate(10deg); }
+    .heart2 { left: 80%; top: 30%; transform: translate(-50%, -50%) scale(1.1) rotate(-20deg); }
+    .heart3 { left: 30%; top: 80%; transform: translate(-50%, -50%) scale(0.9) rotate(15deg); }
+    .heart4 { left: 70%; top: 70%; transform: translate(-50%, -50%) scale(1.0) rotate(5deg); }
+    /* For extra hearts, each inner dot gets the same offset-path and animations */
+    .extra-heart .sparkle {
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(255,255,255,0.9);
+      transform: translate(-50%, -50%);
+      offset-path: path('M150,80 C150,74 140,50 100,50 C40,50 40,125 40,125 C40,160 80,204 150,240 C220,204 260,160 260,125 C260,125 260,50 200,50 C170,50 150,74 150,80 Z');
+      -webkit-offset-path: path('M150,80 C150,74 140,50 100,50 C40,50 40,125 40,125 C40,160 80,204 150,240 C220,204 260,160 260,125 C260,125 260,50 200,50 C170,50 150,74 150,80 Z');
+      offset-rotate: auto;
+      animation: followHeart 4s linear infinite, bloomGlow 1.5s ease-in-out infinite;
+    }
+    /* (For brevity, extra heart dot sizes/delays can be set similarly if desired) */
+    
+    /* --- Romantic Message --- */
+    .message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      font-size: 2em;
+      color: #d0006f;
+      text-align: center;
+      opacity: 0;
+      z-index: 4;
+      text-shadow: 0 0 10px rgba(208,0,111,0.8);
+      animation: showMessage 3s ease-out forwards;
+      animation-delay: 2s;
+    }
+    @keyframes showMessage {
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      50%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+    
+    /* --- Additional Love-Related Objects (with lifelike float-and-sway) --- */
+    .love-objects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .love-object {
+      position: absolute;
+      animation: floatAndSway 4s ease-in-out infinite;
+    }
+    @keyframes floatAndSway {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      25%  { transform: translate(2px, -3px) rotate(1deg); }
+      50%  { transform: translate(0, -6px) rotate(0deg); }
+      75%  { transform: translate(-2px, -3px) rotate(-1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+    /* Example love objects */
+    .love-object.gift { left: 20%; top: 65%; width: 50px; height: 50px; }
+    .love-object.flower { left: 70%; top: 30%; width: 50px; height: 50px; }
+    .love-object.small-heart { left: 50%; top: 10%; width: 40px; height: 40px; }
+    .love-object.gift2 { left: 80%; top: 80%; width: 50px; height: 50px; }
+    .love-object.flower2 { left: 30%; top: 50%; width: 50px; height: 50px; }
+    .love-object.small-heart2 { left: 80%; top: 20%; width: 40px; height: 40px; }
+    .love-object.small-heart3 { left: 10%; top: 20%; width: 35px; height: 35px; }
+    .love-object.gift3 { left: 40%; top: 80%; width: 50px; height: 50px; }
+    .love-object.flower3 { left: 60%; top: 70%; width: 50px; height: 50px; }
+  </style>
+</head>
+<body>
+  <!-- Balloons Floating Up -->
+  <div class="balloons-container">
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+  </div>
+
+  <!-- Main Center Container (centers main sparkling trail & text) -->
+  <div class="main-center">
+    <div class="center-container">
+      <!-- Main Sparkling Trail (defines the big heart) -->
+      <div class="sparkle-heart">
+        <div class="sparkle" style="animation-delay: 0s;    width: 8px;  height: 8px;"></div>
+        <div class="sparkle" style="animation-delay: 0.3s;  width: 10px; height: 10px;"></div>
+        <div class="sparkle" style="animation-delay: 0.6s;  width: 8px;  height: 8px;"></div>
+        <div class="sparkle" style="animation-delay: 0.9s;  width: 12px; height: 12px;"></div>
+        <div class="sparkle" style="animation-delay: 1.2s;  width: 9px;  height: 9px;"></div>
+        <div class="sparkle" style="animation-delay: 1.5s;  width: 11px; height: 11px;"></div>
+        <div class="sparkle" style="animation-delay: 1.8s;  width: 8px;  height: 8px;"></div>
+        <div class="sparkle" style="animation-delay: 2.1s;  width: 10px; height: 10px;"></div>
+        <div class="sparkle" style="animation-delay: 2.4s;  width: 12px; height: 12px;"></div>
+        <div class="sparkle" style="animation-delay: 2.7s;  width: 9px;  height: 9px;"></div>
+        <div class="sparkle" style="animation-delay: 3.0s;  width: 11px; height: 11px;"></div>
+        <div class="sparkle" style="animation-delay: 3.3s;  width: 8px;  height: 8px;"></div>
+      </div>
+      <!-- Romantic Message in the Center -->
+      <div class="message">
+        Happy Valentine Day<br>bé iuuu
+      </div>
+    </div>
+    
+    <!-- Extra Heart Trails (different sizes/rotations) -->
+    <div class="sparkle-heart extra-heart heart1">
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+    </div>
+    <div class="sparkle-heart extra-heart heart2">
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+    </div>
+    <div class="sparkle-heart extra-heart heart3">
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+    </div>
+    <div class="sparkle-heart extra-heart heart4">
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+    </div>
+  </div>
+  
+  <!-- Additional Love-Related Objects -->
+  <div class="love-objects">
+    <div class="love-object gift">
+      <svg viewBox="0 0 64 64">
+        <rect x="8" y="24" width="48" height="32" fill="#ff6699" stroke="#d0006f" stroke-width="2"/>
+        <line x1="8" y1="40" x2="56" y2="40" stroke="#d0006f" stroke-width="2"/>
+        <line x1="32" y1="24" x2="32" y2="56" stroke="#d0006f" stroke-width="2"/>
+        <circle cx="32" cy="24" r="4" fill="#d0006f"/>
+      </svg>
+    </div>
+    <div class="love-object flower">
+      <svg viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="10" fill="#ffcc00" />
+        <circle cx="32" cy="12" r="6" fill="#ff6699" />
+        <circle cx="52" cy="32" r="6" fill="#ff6699" />
+        <circle cx="32" cy="52" r="6" fill="#ff6699" />
+        <circle cx="12" cy="32" r="6" fill="#ff6699" />
+      </svg>
+    </div>
+    <div class="love-object small-heart">
+      <svg viewBox="0 0 64 64">
+        <path d="M32 56 C12 36, 12 16, 32 24 C52 16, 52 36, 32 56 Z" fill="#ff3366"/>
+      </svg>
+    </div>
+    <div class="love-object gift2">
+      <svg viewBox="0 0 64 64">
+        <rect x="8" y="24" width="48" height="32" fill="#ff6699" stroke="#d0006f" stroke-width="2"/>
+        <line x1="8" y1="40" x2="56" y2="40" stroke="#d0006f" stroke-width="2"/>
+        <line x1="32" y1="24" x2="32" y2="56" stroke="#d0006f" stroke-width="2"/>
+        <circle cx="32" cy="24" r="4" fill="#d0006f"/>
+      </svg>
+    </div>
+    <div class="love-object flower2">
+      <svg viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="10" fill="#ffcc00" />
+        <circle cx="32" cy="12" r="6" fill="#ff6699" />
+        <circle cx="52" cy="32" r="6" fill="#ff6699" />
+        <circle cx="32" cy="52" r="6" fill="#ff6699" />
+        <circle cx="12" cy="32" r="6" fill="#ff6699" />
+      </svg>
+    </div>
+    <div class="love-object small-heart2">
+      <svg viewBox="0 0 64 64">
+        <path d="M32 56 C12 36, 12 16, 32 24 C52 16, 52 36, 32 56 Z" fill="#ff3366"/>
+      </svg>
+    </div>
+    <div class="love-object small-heart3">
+      <svg viewBox="0 0 64 64">
+        <path d="M32 56 C12 36, 12 16, 32 24 C52 16, 52 36, 32 56 Z" fill="#ff3366"/>
+      </svg>
+    </div>
+    <div class="love-object gift3">
+      <svg viewBox="0 0 64 64">
+        <rect x="8" y="24" width="48" height="32" fill="#ff6699" stroke="#d0006f" stroke-width="2"/>
+        <line x1="8" y1="40" x2="56" y2="40" stroke="#d0006f" stroke-width="2"/>
+        <line x1="32" y1="24" x2="32" y2="56" stroke="#d0006f" stroke-width="2"/>
+        <circle cx="32" cy="24" r="4" fill="#d0006f"/>
+      </svg>
+    </div>
+    <div class="love-object flower3">
+      <svg viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="10" fill="#ffcc00" />
+        <circle cx="32" cy="12" r="6" fill="#ff6699" />
+        <circle cx="52" cy="32" r="6" fill="#ff6699" />
+        <circle cx="32" cy="52" r="6" fill="#ff6699" />
+        <circle cx="12" cy="32" r="6" fill="#ff6699" />
+      </svg>
+    </div>
+  </div>
+</body>
+</html>
